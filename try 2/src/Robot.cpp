@@ -3,9 +3,9 @@
 class Robot: public IterativeRobot
 {
 
-	RobotDrive myRobot = new Talon(0, 1); // robot drive system
-	Joystick stick = new Joystick(1); // only joystick
-	Talon Elevator = new Talon(2);
+	RobotDrive myRobot; // robot drive system
+	Joystick *stick; // only joystick
+	Talon *Elevator;
 	LiveWindow *lw;
 	int autoLoopCounter;
 
@@ -50,13 +50,14 @@ private:
 	void TeleopPeriodic(void)
 	{
 		myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
-		if (stick.GetTrigger == 1) //raise the elevator
 		{
-				Elevator.Set(-0.7);
+		if(stick->GetRawButton(3) == 1)
+				Elevator->Set(-0.5);
 		}
-		else if (stick.GetTrigger == 0)
+
 		{
-				Elevator.Set(0.0);
+		if (stick->GetRawButton(3) == 0)
+				Elevator->Set(0.0);
 		}
 	}
 
