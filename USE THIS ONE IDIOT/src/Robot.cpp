@@ -5,15 +5,17 @@ class Robot: public IterativeRobot
 
 	RobotDrive myRobot; // robot drive system
 	Joystick *stick; // only joystick
-	Talon *Elevator;
+	Joystick *stick2;
+	Talon talon;// the one pwm controller for the elevator
 	LiveWindow *lw;
 	int autoLoopCounter;
 
 public:
 	Robot() :
 		myRobot(0, 1), // must be intialized in same order
-		stick(1),
-		Elevator(2),
+		stick(1),     // ports are called here , and space if more than one port
+		stick2(2),
+		talon(2),
 		lw(NULL),
 		autoLoopCounter(0)
 	{
@@ -32,13 +34,13 @@ private:
 	}
 
 	void AutonomousPeriodic()
-	{
-		if(autoLoopCounter < 2) //Check if we've completed 100 loops (approximately 2 seconds)
+	{  // still work in progress
+		if(autoLoopCounter < 2) //Check if we've completed the loops 100 loops= 1 second
 		{
-			myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
-			autoLoopCounter++;
-			} else {
-			myRobot.Drive(0.0, 0.0); 	// stop robot
+		myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
+		autoLoopCounter++;
+		} else {
+		myRobot.Drive(0.0, 0.0); 	// stop robot
 		}
 	}
 
@@ -48,17 +50,14 @@ private:
 	}
 
 	void TeleopPeriodic(void)
-	{
+	{  //works
 		myRobot.ArcadeDrive(stick); // drive with arcade style (use right stick)
-		{
-		if(stick->GetRawButton(3) == 1)
-				Elevator->Set(-0.5);
-		}
+		talon.Set(0.5);
 
 		{
-		if (stick->GetRawButton(3) == 0)
-				Elevator->Set(0.0);
+		lw->Run();
 		}
+
 	}
 
 	void TestPeriodic()
