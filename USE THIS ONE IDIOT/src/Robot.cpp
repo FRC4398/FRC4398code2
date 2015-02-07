@@ -7,6 +7,7 @@ class Robot: public IterativeRobot
 	Joystick stick; // only joystick
 	Joystick stick2;
 	Talon talon;// the one pwm controller for the elevator
+	Servo vert;
 	LiveWindow *lw;
 	int autoLoopCounter;
 
@@ -16,6 +17,7 @@ public:
 		stick(1),     // ports are called here , and space if more than one port
 		stick2(2),
 		talon(2),
+		vert(3),
 		lw(NULL),
 		autoLoopCounter(0)
 	{
@@ -53,20 +55,27 @@ private:
 	{  //works
 		myRobot.ArcadeDrive(stick);// drive with arcade style (use right stick)
 
+		{
 		if (stick2.GetRawButton(1) == 1)
-			return talon.Set(-0.75);
+			return talon.Set(-1);
 
 
 		if (stick.GetRawButton(1) == 1)
-			return talon.Set(0.75);
+			return talon.Set(1);
 
 		return talon.Set(0.0);
-
-
-		{
-		lw->Run();
 		}
 
+		{
+		if (stick2.GetRawButton(2) == 1)
+			return talon.Set(-1);
+
+
+		if (stick.GetRawButton(2) == 1)
+			return talon.Set(1);
+
+		return talon.Set(0.0);
+		}
 	}
 
 	void TestPeriodic()
