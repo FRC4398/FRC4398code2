@@ -27,9 +27,12 @@ public:
 private:
 	void RobotInit()
 	{
+		CameraServer::GetInstance()->SetQuality(50);
+		//the camera name (ex "cam0") can be found through the roborio web interface
+		CameraServer::GetInstance()->StartAutomaticCapture("cam0");
+
 		lw = LiveWindow::GetInstance();
 	}
-
 	void AutonomousInit()
 	{
 		autoLoopCounter = 0;
@@ -37,7 +40,7 @@ private:
 
 	void AutonomousPeriodic()
 	{  // still work in progress
-		if(autoLoopCounter < 2) //Check if we've completed the loops 100 loops= 1 second
+		if(autoLoopCounter < 100) //Check if we've completed the loops 100 loops= 1 second
 		{
 		myRobot.Drive(-0.5, 0.0); 	// drive forwards half speed
 		autoLoopCounter++;
@@ -53,6 +56,8 @@ private:
 
 	void TeleopPeriodic(void)
 	{  //works
+		while (IsOperatorControl() && IsEnabled())
+		{
 		myRobot.ArcadeDrive(stick);// drive with arcade style (use right stick)
 
 		{
@@ -76,7 +81,9 @@ private:
 
 		return talon.Set(0.0);
 		}
+		}
 	}
+
 
 	void TestPeriodic()
 	{
