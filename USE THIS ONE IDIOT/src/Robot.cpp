@@ -82,7 +82,11 @@ private:
 		return talon.Set(0.0);
 		}
 		}
+		{
+		lw->Run();
+		}
 	}
+
 
 
 	void TestPeriodic()
